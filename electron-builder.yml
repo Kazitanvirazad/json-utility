@@ -2,6 +2,7 @@ appId: com.electron.${name}
 productName: JSON Utility
 directories:
   buildResources: build
+  app: .
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -12,6 +13,10 @@ asarUnpack:
   - resources/**
 win:
   executableName: json-utility
+  target: msi
+  files:
+    - "**/*"
+  icon: ./build/icon.ico
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
