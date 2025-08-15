@@ -7,12 +7,14 @@ import {
   XMLModel,
   JsonModel,
   FlatUnflatJsonModel,
-  GenericErrorModel
+  GenericErrorModel,
+  YamlModel
 } from './dto/models.mjs';
 import { clipboard } from 'electron';
 import { js2xml } from 'xml-js';
 import xml2js from 'xml2js';
 import { flatten, unflatten } from 'flat';
+import { parse, stringify } from 'yaml';
 
 const _fallbackIndent = 2;
 
@@ -64,8 +66,20 @@ const handlers = [
     _function: (event, value) => {
       return _createJsonFromProperty(value);
     }
+  },
+  {
+    _name: 'convertJsonToYaml',
+    _function: (event, value) => {
+      return _convertJsonToYaml(value);
+    }
+  },
+  {
+    _name: 'convertYamlToJson',
+    _function: (event, value) => {
+      return _convertYamlToJson(value);
+    }
   }
-]
+];
 
 function _convertToJsonFromXml(xml) {
   let jsonModel = new JsonModel();
@@ -78,7 +92,7 @@ function _convertToJsonFromXml(xml) {
       return;
     }
     try {
-      jsonModel.jsonData = JSON.stringify(result, null, 2);
+      jsonModel.jsonText = JSON.stringify(result, null, 2);
       jsonModel.jsonValidity.isValid = true;
     } catch (error) {
       jsonModel.jsonValidity.errorMessage = error.message;
@@ -171,6 +185,34 @@ function _createJsonFromProperty(propertyText) {
   }
   unflattenJsonFromFlatJsonObject(flatUnflatJsonModel);
   return flatUnflatJsonModel;
+}
+
+function _convertJsonToYaml(json) {
+  let yaml = new YamlModel();
+  try {
+    let jsonObject = JSON.parse(json);
+    yaml.yamlText = stringify(jsonObject);
+  } catch (error) {
+    yaml.error = true;
+    yaml.errorMessage = error.message;
+  }
+  return yaml;
+}
+
+function _convertYamlToJson(yaml) {
+  let jsonModel = new JsonModel();
+  if (!yaml || yaml.length < 1) {
+    jsonModel.jsonValidity.errorMessage = 'Invalid Yaml';
+    return jsonModel;
+  }
+  try {
+    jsonModel.jsonValidity.jsonData = parse(yaml);
+    jsonModel.jsonText = JSON.stringify(jsonModel.jsonValidity.jsonData, null, 2);
+    jsonModel.jsonValidity.isValid = true;
+  } catch (error) {
+    jsonModel.jsonValidity.errorMessage = error.message;
+  }
+  return jsonModel;
 }
 
 function unflattenJsonFromFlatJsonObject(flatUnflatJsonModel) {

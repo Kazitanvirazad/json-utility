@@ -33,7 +33,7 @@ export class MinifiedJsonModel {
 export class JsonModel {
   constructor() {
     this.jsonValidity = new JsonValidationModel();
-    this.jsonData = '';
+    this.jsonText = '';
   }
 }
 
@@ -58,5 +58,13 @@ export class GenericErrorModel {
   constructor(error = false, message = '') {
     this.error = error;
     this.errorMessage = message;
+  }
+}
+
+export class YamlModel {
+  constructor(error = false, message = '') {
+    this.error = error;
+    this.errorMessage = message;
+    this.yamlText = '';
   }
 }

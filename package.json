@@ -1,6 +1,6 @@
 {
   "name": "json-utility",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A json utility app",
   "main": "./out/main/index.js",
   "author": "Kazi Tanvir Azad",
@@ -19,11 +19,12 @@
     "build:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
-    "@electron-toolkit/preload": "^3.0.2",
-    "@electron-toolkit/utils": "^4.0.0",
+    "@electron-toolkit/preload": "3.0.2",
+    "@electron-toolkit/utils": "4.0.0",
     "xml-js": "1.6.11",
     "xml2js": "0.6.2",
-    "flat": "6.0.1"
+    "flat": "6.0.1",
+    "yaml": "2.8.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^2.0.0",

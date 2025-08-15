@@ -1,3 +1,8 @@
+"use strict"
+
+import Buttons from './hompage/Buttons';
+import Input from './hompage/Input';
+import TextContainer from './hompage/TextContainer';
 import {
   handleTabKeyIndent,
   prettifyJson,
@@ -12,10 +17,12 @@ import {
   handleEnterKeyOnSearchBoxEvent,
   createPropertyFromJson,
   createJsonFromProperty,
-  handleEnterKeyOnReplaceBoxEvent
-} from './utils/bridgeRenderHelpers.mjs';
+  handleEnterKeyOnReplaceBoxEvent,
+  convertJsonToYaml,
+  convertYamlToJson
+} from '../utils/bridgeRenderHelpers.mjs';
 
-function App() {
+function Home() {
   const clearAllPrompts = () => {
     const elementIds = ['prompt-error', 'prompt-success', 'input-error'];
     clearAllText(elementIds);
@@ -79,7 +86,7 @@ function App() {
     const xmlText = textContainer.value;
     let jsonModel = await convertToJsonFromXml(xmlText);
     if (jsonModel.jsonValidity.isValid) {
-      setRawText(jsonModel.jsonData, document.getElementById('text-container'));
+      setRawText(jsonModel.jsonText, document.getElementById('text-container'));
     } else {
       setText(jsonModel.jsonValidity.errorMessage, document.getElementById('prompt-error'));
     }
@@ -121,42 +128,59 @@ function App() {
     }
   };
 
+  const handleConvertJsonToYaml = async () => {
+    clearAllPrompts();
+    const textContainer = document.getElementById('text-container');
+    const jsontext = textContainer.value;
+    let yamlModel = await convertJsonToYaml(jsontext);
+    if (!yamlModel.error) {
+      setRawText(yamlModel.yamlText, document.getElementById('text-container'));
+    } else {
+      setText(yamlModel.errorMessage, document.getElementById('prompt-error'));
+    }
+  };
+
+  const handleConvertYamlToJson = async () => {
+    clearAllPrompts();
+    const textContainer = document.getElementById('text-container');
+    const yamlText = textContainer.value;
+    let jsonModel = await convertYamlToJson(yamlText);
+    if (jsonModel.jsonValidity.isValid) {
+      setRawText(jsonModel.jsonText, document.getElementById('text-container'));
+    } else {
+      setText(jsonModel.jsonValidity.errorMessage, document.getElementById('prompt-error'));
+    }
+  };
+
   return (
     <>
       <div className="container">
-        <h2>JSON Utility</h2>
-        <div className="textarea-container">
+        <h2 className="unselectable">JSON Utility</h2>
+        <TextContainer tabKeyIndent={handleTabKeyIndent} />
+        {/* <div className="textarea-container">
           <textarea id="text-container" placeholder="Enter json text" onKeyDown={handleTabKeyIndent}></textarea>
           <div className="validation-message">
-            <div id="prompt-error" className='error'></div>
-            <div id="prompt-success" className="success"></div>
+            <div id="prompt-error" className='error unselectable'></div>
+            <div id="prompt-success" className="success unselectable"></div>
           </div>
-        </div>
-        <div>
-          <div>
-            <input id="indent-container" type="text" className="input-box indent" placeholder="Json Indent 0 to 8"></input>
-            <input id="search-container" type="text" className="input-box search" placeholder="Search &crarr;" onKeyDown={handleEnterKeyOnSearchBoxEvent}></input>
-            <input id="replace-container" type="text" className="input-box replace" placeholder="Replace With &crarr;" onKeyDown={handleEnterKeyOnReplaceBoxEvent}></input>
-          </div>
-          <div id="input-error" className="validation-message error"></div>
-        </div>
-        <div className="button-group">
-          <button className="btn" onClick={handlePrettifyJson}>Beautify Json</button>
-          <button className="btn" onClick={handleValidateJson}>Validate Json</button>
-          <button className="btn" onClick={handleCreatePropertyFromJson}>Json &rarr;	Yaml</button>
-          <button className="btn" onClick={handleCreatePropertyFromJson}>Json &rarr;	Property</button>
-          <button className="btn" onClick={handleConvertToXmlFromJson}>Json &rarr;	Xml</button>
-        </div>
-        <div className="button-group">
-          <button className="btn" onClick={handleMinifyJson}>Minify Json</button>
-          <button className="btn" onClick={handleCopyToClipboard}>Copy to Clipboard</button>
-          <button className="btn" onClick={handleCreateJsonFromProperty}>Yaml &rarr;	Json</button>
-          <button className="btn" onClick={handleCreateJsonFromProperty}>Property &rarr;	Json</button>
-          <button className="btn" onClick={handleConvertToJsonFromXml}>Xml &rarr;	Json</button>
-        </div>
+        </div> */}
+        <Input
+          enterKeyOnSearchBoxEvent={handleEnterKeyOnSearchBoxEvent}
+          enterKeyOnReplaceBoxEvent={handleEnterKeyOnReplaceBoxEvent} />
+        <Buttons
+          prettifyJson={handlePrettifyJson}
+          validateJson={handleValidateJson}
+          convertJsonToYaml={handleConvertJsonToYaml}
+          createPropertyFromJson={handleCreatePropertyFromJson}
+          convertToXmlFromJson={handleConvertToXmlFromJson}
+          minifyJson={handleMinifyJson}
+          copyToClipboard={handleCopyToClipboard}
+          convertYamlToJson={handleConvertYamlToJson}
+          createJsonFromProperty={handleCreateJsonFromProperty}
+          convertToJsonFromXml={handleConvertToJsonFromXml} />
       </div>
     </>
   );
 }
 
-export default App;
+export default Home;

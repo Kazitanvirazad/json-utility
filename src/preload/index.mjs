@@ -19,7 +19,9 @@ if (process.contextIsolated) {
       convertToXmlFromJson: (value) => ipcRenderer.invoke('convertToXmlFromJson', value),
       convertToJsonFromXml: (value) => ipcRenderer.invoke('convertToJsonFromXml', value),
       createPropertyFromJson: (value) => ipcRenderer.invoke('createPropertyFromJson', value),
-      createJsonFromProperty: (value) => ipcRenderer.invoke('createJsonFromProperty', value)
+      createJsonFromProperty: (value) => ipcRenderer.invoke('createJsonFromProperty', value),
+      convertJsonToYaml: (value) => ipcRenderer.invoke('convertJsonToYaml', value),
+      convertYamlToJson: (value) => ipcRenderer.invoke('convertYamlToJson', value)
     });
   } catch (error) {
     console.error(error);

@@ -61,6 +61,14 @@ export const createJsonFromProperty = async (propertyText) => {
   return await window.uiHandlers.createJsonFromProperty(propertyText);
 }
 
+export const convertJsonToYaml = async (json) => {
+  return await window.uiHandlers.convertJsonToYaml(json);
+}
+
+export const convertYamlToJson = async (yaml) => {
+  return await window.uiHandlers.convertYamlToJson(yaml);
+}
+
 export function setText(txt, htmlElement) {
   htmlElement.innerHTML = `<span>${txt}</span>`;
 }
