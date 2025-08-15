@@ -157,13 +157,6 @@ function Home() {
       <div className="container">
         <h2 className="unselectable">JSON Utility</h2>
         <TextContainer tabKeyIndent={handleTabKeyIndent} />
-        {/* <div className="textarea-container">
-          <textarea id="text-container" placeholder="Enter json text" onKeyDown={handleTabKeyIndent}></textarea>
-          <div className="validation-message">
-            <div id="prompt-error" className='error unselectable'></div>
-            <div id="prompt-success" className="success unselectable"></div>
-          </div>
-        </div> */}
         <Input
           enterKeyOnSearchBoxEvent={handleEnterKeyOnSearchBoxEvent}
           enterKeyOnReplaceBoxEvent={handleEnterKeyOnReplaceBoxEvent} />
