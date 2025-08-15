@@ -8,12 +8,16 @@ import {
   setRawText,
   convertToXmlFromJson,
   convertToJsonFromXml,
-  clearAllText
+  clearAllText,
+  handleEnterKeyOnSearchBoxEvent,
+  createPropertyFromJson,
+  createJsonFromProperty,
+  handleEnterKeyOnReplaceBoxEvent
 } from './utils/bridgeRenderHelpers.mjs';
 
 function App() {
   const clearAllPrompts = () => {
-    const elementIds = ['prompt-error', 'prompt-success', 'indent-error'];
+    const elementIds = ['prompt-error', 'prompt-success', 'input-error'];
     clearAllText(elementIds);
   };
 
@@ -40,7 +44,7 @@ function App() {
     } else {
       setText(
         prettifiedJsonModel.jsonValidity.errorMessage,
-        document.getElementById(prettifiedJsonModel.isIndentInvalid ? 'indent-error' : 'prompt-error')
+        document.getElementById(prettifiedJsonModel.isIndentInvalid ? 'input-error' : 'prompt-error')
       );
     }
   };
@@ -93,6 +97,30 @@ function App() {
     }
   };
 
+  const handleCreatePropertyFromJson = async () => {
+    clearAllPrompts();
+    const textContainer = document.getElementById('text-container');
+    const jsontext = textContainer.value;
+    let flatUnflatJsonModel = await createPropertyFromJson(jsontext);
+    if (!flatUnflatJsonModel.error) {
+      setRawText(flatUnflatJsonModel.propertyText, document.getElementById('text-container'));
+    } else {
+      setText(flatUnflatJsonModel.errorMessage, document.getElementById('prompt-error'));
+    }
+  };
+
+  const handleCreateJsonFromProperty = async () => {
+    clearAllPrompts();
+    const textContainer = document.getElementById('text-container');
+    const propertyText = textContainer.value;
+    let flatUnflatJsonModel = await createJsonFromProperty(propertyText);
+    if (!flatUnflatJsonModel.error) {
+      setRawText(flatUnflatJsonModel.unflattenedJsonString, document.getElementById('text-container'));
+    } else {
+      setText(flatUnflatJsonModel.errorMessage, document.getElementById('prompt-error'));
+    }
+  };
+
   return (
     <>
       <div className="container">
@@ -105,19 +133,26 @@ function App() {
           </div>
         </div>
         <div>
-          <input id="indent-container" type="text" className="indent-box" placeholder="Indent 0 to 8"></input>
-          <div id="indent-error" className="validation-message error"></div>
+          <div>
+            <input id="indent-container" type="text" className="input-box indent" placeholder="Json Indent 0 to 8"></input>
+            <input id="search-container" type="text" className="input-box search" placeholder="Search &crarr;" onKeyDown={handleEnterKeyOnSearchBoxEvent}></input>
+            <input id="replace-container" type="text" className="input-box replace" placeholder="Replace With &crarr;" onKeyDown={handleEnterKeyOnReplaceBoxEvent}></input>
+          </div>
+          <div id="input-error" className="validation-message error"></div>
         </div>
         <div className="button-group">
-          <button className="btn" onClick={handlePrettifyJson}>Prettify Json</button>
-          <button className="btn" onClick={handleMinifyJson}>Minify Json</button>
+          <button className="btn" onClick={handlePrettifyJson}>Beautify Json</button>
           <button className="btn" onClick={handleValidateJson}>Validate Json</button>
-          <button className="btn" onClick={handleCopyToClipboard}>Copy to clipboard</button>
+          <button className="btn" onClick={handleCreatePropertyFromJson}>Json &rarr;	Yaml</button>
+          <button className="btn" onClick={handleCreatePropertyFromJson}>Json &rarr;	Property</button>
+          <button className="btn" onClick={handleConvertToXmlFromJson}>Json &rarr;	Xml</button>
         </div>
         <div className="button-group">
-          <button className="btn">JSON &harr;	PROPERTY</button>
-          <button className="btn" onClick={handleConvertToXmlFromJson}>JSON &rarr;	XML</button>
-          <button className="btn" onClick={handleConvertToJsonFromXml}>XML &rarr;	JSON</button>
+          <button className="btn" onClick={handleMinifyJson}>Minify Json</button>
+          <button className="btn" onClick={handleCopyToClipboard}>Copy to Clipboard</button>
+          <button className="btn" onClick={handleCreateJsonFromProperty}>Yaml &rarr;	Json</button>
+          <button className="btn" onClick={handleCreateJsonFromProperty}>Property &rarr;	Json</button>
+          <button className="btn" onClick={handleConvertToJsonFromXml}>Xml &rarr;	Json</button>
         </div>
       </div>
     </>

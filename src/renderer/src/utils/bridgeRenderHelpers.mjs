@@ -12,6 +12,22 @@ export const handleTabKeyIndent = (event) => {
   }
 }
 
+export const handleEnterKeyOnSearchBoxEvent = (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    console.log("Enter pressed");
+
+  }
+}
+
+export const handleEnterKeyOnReplaceBoxEvent = (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    console.log("Enter pressed");
+
+  }
+}
+
 export const isValidJson = async (json) => {
   return await window.uiHandlers.isValidJson(json);
 }
@@ -35,6 +51,14 @@ export const convertToXmlFromJson = async (json) => {
 
 export const convertToJsonFromXml = async (xml) => {
   return await window.uiHandlers.convertToJsonFromXml(xml);
+}
+
+export const createPropertyFromJson = async (json) => {
+  return await window.uiHandlers.createPropertyFromJson(json);
+}
+
+export const createJsonFromProperty = async (propertyText) => {
+  return await window.uiHandlers.createJsonFromProperty(propertyText);
 }
 
 export function setText(txt, htmlElement) {

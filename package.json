@@ -22,7 +22,8 @@
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "xml-js": "1.6.11",
-    "xml2js": "0.6.2"
+    "xml2js": "0.6.2",
+    "flat": "6.0.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^2.0.0",

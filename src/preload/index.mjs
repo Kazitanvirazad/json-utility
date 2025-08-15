@@ -17,7 +17,9 @@ if (process.contextIsolated) {
       minifyJson: (value) => ipcRenderer.invoke('minifyJson', value),
       copyToClipboard: (value) => ipcRenderer.invoke('copyToClipboard', value),
       convertToXmlFromJson: (value) => ipcRenderer.invoke('convertToXmlFromJson', value),
-      convertToJsonFromXml: (value) => ipcRenderer.invoke('convertToJsonFromXml', value)
+      convertToJsonFromXml: (value) => ipcRenderer.invoke('convertToJsonFromXml', value),
+      createPropertyFromJson: (value) => ipcRenderer.invoke('createPropertyFromJson', value),
+      createJsonFromProperty: (value) => ipcRenderer.invoke('createJsonFromProperty', value)
     });
   } catch (error) {
     console.error(error);
