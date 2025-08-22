@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain, Menu, nativeImage } from 'electron'
 import { join } from 'path';
 import { optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png';
+import iconMac from '../../resources/icon.png?asset';
 import uiInvkHandlers from './uiInvocationHandlers.mjs';
 
 function createWindow() {
@@ -25,7 +26,7 @@ function createWindow() {
       undefined
   });
   if (process.platform === 'darwin') {
-    app.dock.setIcon(icon);
+    app.dock.setIcon(iconMac);
   }
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
@@ -57,7 +58,7 @@ app.whenReady().then(() => {
     app.setName('JSON Utility');
     const template = [
       {
-        Label: app.name,
+        label: app.name,
         submenu: [
           { role: 'about' },
           { type: 'separator' },
